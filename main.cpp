@@ -1,7 +1,26 @@
-#include <SMFL/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 
-
+class source{
+    sf::Vector2f pos;
+    float force;
+    sf::CircleShape sun;
+    
+public:
+    source(float pos_x ,float pos_y ,float force){
+        pos.x = pos_x;
+        pos.y = pos_y;
+        this->force = force;
+    }
+    
+    sun.setPosition(pos);
+    sun.setFullColor(sf::Color::Yellow);
+    sun.setRadius(5);
+    
+    void render(sf::RenderWindow& rend){
+        rend.draw(sun);
+    }
+}
 
 
 int main(){
