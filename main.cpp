@@ -15,9 +15,10 @@ public:
     
     sun.setPosition(pos);
     sun.setFullColor(sf::Color::Yellow);
-    sun.setRadius(5);
+    sun.setRadius(9);
     
     void render(sf::RenderWindow& rend){
+        sun.setPosition(pos);
         rend.draw(sun);
     }
     
@@ -51,8 +52,8 @@ public:
     }
     
     void physics(source &S){
-        float dist_x = s.get_pos().x - pos.x;
-        float dist_y = s.get_pos().y - pos.y;
+        float dist_x = sun.get_pos().x - pos.x;
+        float dist_y = sun.get_pos().y - pos.y;
         float distance = sqrt(dist_x*dist_x + dist_y*dist_y);
         
         float inverse_dist = 1.f/distance;
@@ -62,10 +63,14 @@ public:
         
         float inverse_square_law = inverse_dist * inverse_dist;
         
-        float accel_x = normalized_x * s.get_force() * inverse_square_law;
-        float accel_y = normalized_y * s.get_force() * inverse_square_law;
+        float accel_x = normalized_x * sun.get_force() * inverse_square_law;
+        float accel_y = normalized_y * sun.get_force() * inverse_square_law;
         
+        vel.x += accel_x;
+        vel.y += accel_y;
         
+        pos.x += vel.x;
+        pos.y += vel.y;
         
     }
 }
@@ -73,9 +78,11 @@ public:
 
 
 int main(){
-    sf::RenderWindow window(sf::VideoMode(1280,720), "MY PROGRAM");
+    sf::RenderWindow window(sf::VideoMode(1600,1000), "MY PROGRAM");
     window.setFramerateLimit(60);
     
+    source sour(800, 500, 7000);
+    particle par(600, 700, 4, 0);
     
     while(window.isOpen()){
         sf::Event event;
@@ -86,6 +93,12 @@ int main(){
         }
         
         window.clear();
+        par.physics(sour);
+        
+        sour.render(window);
+        par.render(window);
+        
+        
         window.display();
     }
     
